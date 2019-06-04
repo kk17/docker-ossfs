@@ -1,0 +1,23 @@
+version: "3"
+services:
+  ossfs:
+    image: kk17/ossfs
+    cap_add:
+      - MKNOD
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    devices:
+    - '/dev/fuse'
+    volumes:
+     - ./passwd-ossfs:/etc/passwd-ossfs
+     - ./data:/data:${BIND_PROPAGATION:-rprivate}
+    command: ossfs -f ${BUCKET} /data -ourl=oss-ap-southeast-1.aliyuncs.com 
+
+  test:
+    image: alpine
+    depends_on: 
+      - ossfs
+    volumes:
+      - ./data:/data
+    command: tail -f .
