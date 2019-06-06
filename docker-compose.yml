@@ -3,12 +3,11 @@ services:
   ossfs:
     image: kk17/ossfs
     cap_add:
-      - MKNOD
       - SYS_ADMIN
-    security_opt:
-      - apparmor:unconfined
     devices:
     - '/dev/fuse'
+    security_opt:
+      - apparmor:unconfined
     volumes:
      - ./passwd-ossfs:/etc/passwd-ossfs
      - ./data:/data:${BIND_PROPAGATION:-rprivate}
